@@ -35,19 +35,19 @@ class User(UserMixin,db.Model):
         return f'User {self.username}'
 
 '''
-Pitch ideas table
+Blog ideas table
 '''
 
 class Blogs(db.Model):
-    __tablename__="pitches"
+    __tablename__="Blog"
     id=db.Column(db.Integer,primary_key=True)
-    pitch=db.Column(db.String(500))
+    blog=db.Column(db.String(500))
     title=db.Column(db.String(250))
     author=db.Column(db.String(250))
     categ=db.Column(db.String(250))
     role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))
     def __repr__(self):
-        return f'User {self.pitch}'
+        return f'User {self.blog}'
 
 '''
 Comments model
@@ -56,8 +56,8 @@ Comments model
 class Comments(db.Model):
     __tablename__='comments'
     id=db.Column(db.Integer,primary_key=True)
-    pitch_id=db.Column(db.Integer)
-    pitch_title=db.Column(db.String)
+    blog_id=db.Column(db.Integer)
+    blog_title=db.Column(db.String)
     comments=db.Column(db.String)
     posted=db.Column(db.DateTime,default=datetime.utcnow)
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
@@ -78,7 +78,7 @@ class Role(db.Model):
     __tablename__='roles'
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(250))
-    pitches=db.relationship('Pitches',backref='category',lazy="dynamic")
+    blogdb.relationship('Blog',backref='category',lazy="dynamic")
 
     def __repr__(self):
         return f'User {self.name}'

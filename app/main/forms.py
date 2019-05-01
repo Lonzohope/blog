@@ -9,10 +9,10 @@ class UpdateProfile(FlaskForm):
     submit=SubmitField("Submit")
 
 
-class WritePitch(FlaskForm):
+class WriteBlog(FlaskForm):
     title=StringField("Title of your Idea",validators=[Required()])
     categ=SelectField("Choose Category",choices=[('c','select'),('AI','Artifitial Intelegence'),('R','Robotics'),('D','Drones'),('IOT','IoT')],validators=[Required()])
-    pitch=TextAreaField("In about 200 words Write your Idea",validators=[Required()])
+    blog=TextAreaField("In about 200 words Write your Idea",validators=[Required()])
     submit=SubmitField("Submit")
 
 class ReviewForm(FlaskForm):

@@ -57,10 +57,10 @@
 
   </div>
   <div class="col-md-8">
-    <h1>My pitch Ideas</h1>
+    <h1>My blog Ideas</h1>
     <div class="row">
-        {%if pitch%}
-        {%for project in pitch%}
+        {%if blog%}
+        {%for project in blog%}
 
       <div class="col-md-6">
 
@@ -69,7 +69,7 @@
             <div  class="jumbotron title">
               <h5>{{project.title}}</h5>
             </div>
-            {{project.pitch}}
+            {{project.blog}}
             <br>
             <i class="vom">Cetegory {{project.categ}}</i>
             <br>

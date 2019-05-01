@@ -6,7 +6,7 @@ from .forms import UpdateProfile,ReviewForm
 from .. import db,photos
 @main.route("/")
 def index():
-    title="Pitch"
+    title="Blog"
     message="Home of ideas, Where ideas are born"
     top=Blogs.query.all();
     blog=Blogs.query.filter_by(categ="AI").all()
