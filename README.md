@@ -1,19 +1,19 @@
-# Project-pitch
+# Blog
 ####
 #### By ** Hope Mutheu **
 
 ## Description
 
-This is an application created using python that allows users to use one minute wisely since in life we only have 60 seconds to impress someone. 1 minute can make or break you. he users will submit their one minute pitches and other users will vote on them and leave comments to give their feedback on them.
+This is an application where a user can view blogs on different cars and the most loved and they can also share blogs of their favorite cars and upvote or downvote.
 ## BDD
 
 | Behavior |  Output Example |
 | :-------------: |-------------: |
-| Go to the navbar and click on the pitch button |Different pitches will be displayed.  |
-| Click on any pitch you want | There two buttons one for upvoting and the other for downvoting |
-| You can give comments on the pitch you selected| Sign up form so that you could leave a comment|
+| Go to the navbar and click on the blog button |Different blogs will be displayed.  |
+| Click on any blog you want | There two buttons one for upvoting and the other for downvoting |
+| You can give comments on the blog you selected| Sign up form so that you could leave a comment|
 | Fill in the sign up form | An email is sent after you sign up|
-| Create a profile page | All the pitches you have created are displayed |
+| Create a profile page | All the blogs you have created are displayed |
 
 
 
@@ -23,7 +23,7 @@ This is an application created using python that allows users to use one minute 
 * Load gitHub on your browser.
 * Search for mainamurage/triangle-tracker repository.
 * Fork the data onto your own personal repository.
-* To access the live website, click on this url:https://github.com/Lonzohope/project-pitch
+* To access the live website, click on this url:https://github.com/Lonzohope/blog
 ## Known Bugs
 
 No known bugs
