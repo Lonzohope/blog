@@ -1,0 +1,184 @@
+{%extends 'base.html'%}
+
+
+{%block content%}
+<div class=" main jumbotron">
+  <h1>Welcome to Blogyyy!</h1>
+  <h4>{{message}}</h4>
+  {%if current_user.is_authenticated%}
+  <p>Share your ideas on cars</p><a href="{{url_for('main.new_pitch',uname=current_user.username)}}"><button class="btn default-color" type="button" name="button">Here</button></a>
+  {%else%}
+  <p>Share your ideas on cars </p><a><button class="btn default-color" id="login" type="button" title="Login Required To post your Idea" name="button">Here</button></a>
+  {%endif%}
+</div>
+<div class="container-fluid">
+  <div class="row">
+    {%for all in top_blog%}
+    <div class="col-md-3">
+      <div class="one">
+        <div class="on">
+          <div  class="jumbotron title">
+            <h5>{{all.title}}</h5> <span class="animated fadeIn " aria-hidden="true">New</span>
+          </div>
+          {{all.blog}}
+          <br>
+          <i class="vom">Category {{all.categ}}</i>
+          <br>
+          <hr class="default-color">
+          <a class="btn default-color" href="/blog/new/review/{{all.id}}">comment</a>
+        </div>
+
+      </div>
+    </div>
+    {%endfor%}
+
+  </div>
+  <br>
+  <!-- Category Ai starts here-->
+  <div class="ai jumbotron">
+    <div class="row">
+      <div class="col-md-3"><div class="cat card">
+        <h1>Range Rover </h1><hr class="default-color">Category<br><br> <button id="range" class="btn default-color" type="button" name="button">View Category</button></div>
+      </div>
+      <div class="col-md-3"> <div class="cat card">
+        <h1>Mercedes Benz</h1><hr class="default-color">Category<br><br><button id="mac" class="btn default-color" type="button" name="button">View Category</button></div>
+      </div>
+      <div class="col-md-3"><div class="cat card">
+        <h1>Audi</h1><hr class="default-color">Category<br><br><button id="audi" class="btn default-color" type="button" name="button">View Category</button>
+      </div></div>
+      <div class="col-md-3"><div class="cat card">
+        <h1>Subaru</h1><hr class="default-color">Category<br><br><button id="subie" class="btn default-color" type="button" name="button">View Category</button>
+      </div></div>
+
+    </div>
+  </div>
+
+
+  <!-- <div id="AI" class="animated fadeIn row">
+    <div class="col-md-12">
+      <h1>Artificial intelligence (AI) Category</h1>
+
+    </div>
+    {%for i in pitch%}
+    <div class="col-md-3">
+      <div class="one">
+        <div class="on">
+          <div  class="jumbotron title">
+            <h5>{{i.title}}</h5>
+          </div>
+          {{i.pitch}}
+          <hr class="default-color">
+          <a class="btn btn-secondary" href="/pitch/new/review/{{i.id}}">comment</a>
+        </div>
+
+      </div>
+
+    </div>
+    {%endfor%}
+  </div>
+  <div id="R" class="animated fadeIn row">
+    <div class="col-md-12">
+      <h1>Robotics  (R) Category</h1>
+
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        {%for pit in pitch1%}
+        <div class="col-md-3">
+          <div class="one">
+            <div class="on">
+              <div  class="jumbotron title">
+                <h5>{{pit.title}}</h5>
+              </div>
+              {{pit.pitch}}
+              <hr class="default-color">
+              <a class="btn btn-secondary" href="/pitch/new/review/{{pit.id}}">comment</a>
+            </div>
+
+          </div>
+
+        </div>
+
+        {%endfor%}
+      </div>
+    </div>
+
+
+    </div>
+
+    <!--Robotic-->
+
+
+<!-- <div id="D" class="animated fadeIn row">
+  <div class="col-md-12">
+    <h1>Drones  (D) Category</h1>
+
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      {%for i2 in pitch2%}
+      <div class="col-md-3">
+        <div class="one">
+          <div class="on">
+            <div  class="jumbotron title">
+              <h5>{{i2.title}}</h5>
+            </div>
+            {{i2.pitch}}
+            <hr class="default-color">
+            <a class="btn btn-secondary" href="/pitch/new/review/{{i2.id}}">comment</a>
+          </div>
+
+        </div>
+
+      </div>
+
+      {%endfor%}
+    </div>
+
+  </div>
+
+    </div>
+
+    <!-- IoT-->
+    <!-- <div id="IoT" class="animated fadeIn row">
+      <div class="col-md-12">
+        <h1>Internet of Everything  (IoT) Category</h1>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          {%for i3 in pitch3%}
+          <div class="col-md-3">
+            <div class="one">
+              <div class="on">
+                <div  class="jumbotron title">
+                  <h5>{{i3.title}}</h5>
+                </div>
+                {{i3.pitch}}
+                <hr class="default-color">
+                <a class="btn btn-secondary" href="/pitch/new/review/{{i3.id}}">comment</a>
+              </div>
+
+            </div>
+
+          </div>
+
+          {%endfor%}
+        </div>
+      </div>
+
+  </div>
+
+</div> --> 
+<footer class="page-footer font-small bg-default pt-4">
+
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://github.com/Lonzohope"> Hope Mutheu</a>
+      </div>
+      <!-- Copyright -->
+
+    </footer>
+
+
+
+{%endblock%}
