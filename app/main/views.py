@@ -2,20 +2,20 @@ from flask import render_template,request,redirect,url_for,abort,flash
 from ..models import User,Blogs,Comments
 from . import main
 from flask_login import login_required,current_user
-from .forms import UpdateProfile,WritePitch,ReviewForm
+from .forms import UpdateProfile,ReviewForm
 from .. import db,photos
 @main.route("/")
 def index():
     title="Pitch"
     message="Home of ideas, Where ideas are born"
-    top=Pitches.query.all();
-    pitch=Pitches.query.filter_by(categ="AI").all()
-    pitch1=Pitches.query.filter_by(categ="R").all()
-    pitch2=Pitches.query.filter_by(categ="D").all()
-    pitch3=Pitches.query.filter_by(categ="IOT").all()
+    top=Blogs.query.all();
+    blog=Blogs.query.filter_by(categ="AI").all()
+    blog1=Blogs.query.filter_by(categ="R").all()
+    blog2=Blogs.query.filter_by(categ="D").all()
+    blog3=Blogs.query.filter_by(categ="IOT").all()
     top.reverse()
-    top_pitch=top[0:4]
-    return render_template("index.html",title=title,message=message,pitch=pitch,top_pitch=top_pitch,pitch1=pitch1,pitch2=pitch2,pitch3=pitch3)
+    top_blog=top[0:4]
+    return render_template("index.html",title=title,message=message,blog=blog,top_blog=top_blog,blog1=blog1,blog2=blog2,blog3=blog3)
 
 
 @main.route("/user/<uname>")

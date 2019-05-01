@@ -38,7 +38,7 @@ class User(UserMixin,db.Model):
 Pitch ideas table
 '''
 
-class Pitches(db.Model):
+class Blogs(db.Model):
     __tablename__="pitches"
     id=db.Column(db.Integer,primary_key=True)
     pitch=db.Column(db.String(500))
