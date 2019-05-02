@@ -1,5 +1,0 @@
-Hello {{user.username}}
-Welcome to Blogyyy!-Perfect by nignanthomas.
-
-
-Thanks!

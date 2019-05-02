@@ -1,21 +1,26 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,TextAreaField,SelectField
+from wtforms import StringField,PasswordField,SubmitField,ValidationError,BooleanField,TextAreaField
 from wtforms.validators import Required,Email,EqualTo
-from ..models import User
-from wtforms import ValidationError
+
+class CommentForm(FlaskForm):
+    email=StringField('Your email ',validators=[Required(),Email()])
+    name=StringField("Your name",validators=[Required()])
+    comment=TextAreaField("Comment",validators=[Required()])
+    submit=SubmitField("Submit")
+
+class AdminBlog(FlaskForm):
+
+    title=StringField("Title",validators=[Required()])
+    body=TextAreaField("Blog Body")
+    submit=SubmitField("Submit")
+
+class DeleteBlog(FlaskForm):
+    delete=SubmitField("Delete this Blog")
+
+class DeleteComment(FlaskForm):
+    delete1=SubmitField("Delete")
 
 class UpdateProfile(FlaskForm):
-    about=TextAreaField("Tell other people about you.",validators=[Required()])
-    submit=SubmitField("Submit")
-
-
-class WriteBlog(FlaskForm):
-    title=StringField("Title of your Idea",validators=[Required()])
-    categ=SelectField("Choose Category",choices=[('c','select'),('AI','Artifitial Intelegence'),('R','Robotics'),('D','Drones'),('IOT','IoT')],validators=[Required()])
-    blog=TextAreaField("In about 200 words Write your Idea",validators=[Required()])
-    submit=SubmitField("Submit")
-
-class ReviewForm(FlaskForm):
-    title=StringField(" Comment title",validators=[Required()])
-    comments=TextAreaField("Comments",validators=[Required()])
-    submit=SubmitField("Submit")
+    about=TextAreaField("Tell us abou you ",validators=[Required()])
+    occupation=StringField("What is yout current Ocupation",validators=[Required()])
+    submit=SubmitField("Save")

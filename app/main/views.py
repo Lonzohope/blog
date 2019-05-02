@@ -1,96 +1,115 @@
-from flask import render_template,request,redirect,url_for,abort,flash
-from ..models import User,Blogs,Comments
 from . import main
-from flask_login import login_required,current_user
-from .forms import UpdateProfile,ReviewForm
+from flask import render_template,redirect,url_for,flash,request,abort
+from .forms import CommentForm,AdminBlog,DeleteBlog,DeleteComment,UpdateProfile
 from .. import db,photos
-@main.route("/")
+import markdown2
+from ..models import Blogs,Comments,Users
+from ..request import get_quote
+from ..email import mail_message
+
+
+
+@main.route("/",methods=['POST','GET'])
 def index():
+    quote=get_quote()
     title="Blog"
-    message="Home of ideas, Where ideas are born"
-    top=Blogs.query.all();
-    blog=Blogs.query.filter_by(categ="AI").all()
-    blog1=Blogs.query.filter_by(categ="R").all()
-    blog2=Blogs.query.filter_by(categ="D").all()
-    blog3=Blogs.query.filter_by(categ="IOT").all()
-    top.reverse()
-    top_blog=top[0:4]
-    return render_template("index.html",title=title,message=message,blog=blog,top_blog=top_blog,blog1=blog1,blog2=blog2,blog3=blog3)
-
-
-@main.route("/user/<uname>")
-def profile(uname):
-    user=User.query.filter_by(username=uname).first()
-
-    if user is None:
-        abort(404)
-
-    blog=Blogs.query.filter_by(author=uname).all()
-    title=uname
-    return render_template("profile/profile.html",user=user,blog=blog,title=title)
-
-'''
-new blog idea
-'''
-
-@main.route("/<uname>",methods=["GET","POST"])
-@login_required
-def new_blog(uname):
-    uname=uname
-    user=User.query.filter_by(username=uname).first()
-    if user is None:
-        abort(404)
-
-    form=WriteBlog()
+    message="Pythoning Tutorials"
+    blogs=Blogs.query.all()
+    top_blog=Blogs.query.all()
+    top_blog.reverse()
+    topBlog=top_blog[0:1]
+    commento=Comments.query.filter_by(blog_id=500).all()
+    form = CommentForm()
     if form.validate_on_submit():
-        new_Blog=Blog(Blog=form.blog.data,title=form.title.data,author=uname,categ=form.categ.data)
-        db.session.add(new_blog)
+        comments=Comments(blog_id=500,email=form.email.data,username=form.name.data,comment=form.comment.data)
+        comments.save_comments()
+        return redirect(url_for('main.index'))
+    return render_template("index.html",commento=commento,topBlog=topBlog,quote=quote,message=message,title=title,comments=form,blogs=blogs)
+
+@main.route("/new_blog",methods=["POST","GET"])
+def new_blog():
+    #query all emails
+    emails=Comments.query.all()
+    all_emails=[]
+    for emal in emails:
+        all_emails.append(emal.email)
+
+
+    form=AdminBlog()
+    if form.validate_on_submit():
+        blog=Blogs(title=form.title.data,body=form.body.data)
+        db.session.add(blog)
         db.session.commit()
-        return redirect(url_for(".index"))
+        mail_message("Hello A new Blog has been posted","email/welcome_user","")
+        return redirect(url_for('main.index'))
 
+    title="Write a blog"
+    return render_template("new_blog.html",title=title,newBlog=form,all_emails=all_emails)
 
-    title="new Blog"
-    return render_template("blog.html",new_review=form,title=title)
-
-'''
-review
-'''
-
-@main.route("/blog/new/review/<int:id>",methods=["GET","POST"])
-@login_required
-def review(id):
+@main.route("/read_blog/title/<int:id>/",methods=['GET','POST'])
+def read_blog(id):
     blog_id=id
-    blog=Blog.query.all();
-    title="Write a comment"
-    form=ReviewForm()
+    title="Blog"
+    message="Welcome to my Blog"
+    blog=Blogs.query.filter_by(id=id).first()
+    blogs=Blogs.query.all()
+    data=blog.title
+    form = CommentForm()
+
     if form.validate_on_submit():
-        title=form.title.data
-        comments=form.comments.data
-
-        #update this variables
-        review=Comments(blog_id=id,blog_title=title,comments=comments,user=current_user)
-
-        #save
-        review.save_comment()
-        return redirect(url_for('.review',id=blog_id))
-
-    '''
-    query Comments database table
-    '''
-    all_comments=Comments.query.filter_by(blog_id=id).all()
-
-    return render_template("new_review.html",blog=blog,id=blog_id,title=title,comment_form=form,all=all_comments)
+        comments=Comments(blog_id=id,email=form.email.data,username=form.name.data,comment=form.comment.data)
+        comments.save_comments()
+        return redirect(url_for('main.read_blog',id=blog_id))
 
 
-@main.route("/user/<uname>/update",methods=["GET","POST"])
-@login_required
+
+    format_blog=markdown2.markdown(blog.body,extras=["code-friendly", "fenced-code-blocks"])
+
+    blog_comment=Comments.query.filter_by(blog_id=id).all()
+
+
+    del_form=DeleteBlog()
+    dele=Blogs.query.filter_by(id=id).first()
+    if del_form.validate_on_submit():
+
+        db.session.delete(dele)
+        db.session.commit()
+        # flash("Blog deleted sucessfully","success")
+        return redirect(url_for('main.index'))
+
+
+
+    del_comment=DeleteComment()
+
+    if del_comment.validate_on_submit():
+        dele_com=Comments.query.filter_by(blog_id=id).first()
+        db.session.delete(dele_com)
+        db.session.commit()
+
+        return redirect(url_for('main.read_blog',id=blog_id))
+
+
+
+    return render_template("read_blog.html",deleform=del_form,data=data,blogComment=blog_comment,format_blog=format_blog,message=message,title=title,comments=form,blogs=blogs,id=id,del_comment=del_comment)
+
+#profile pic
+@main.route("/profile/<uname>")
+def profile(uname):
+    user=Users.query.filter_by(username=uname).first()
+    if user is None:
+        abort(404)
+
+    return render_template("profile/profile.html",user=user)
+
+@main.route("/profile/<uname>/update",methods=['GET','POST'])
 def update_profile(uname):
-    user=User.query.filter_by(username=uname).first()
+    user=Users.query.filter_by(username=uname).first()
     if user is None:
         abort(404)
     form =UpdateProfile()
     if form.validate_on_submit():
         user.about=form.about.data
+        user.occupation=form.occupation.data
         db.session.add(user)
         db.session.commit()
 
@@ -98,27 +117,12 @@ def update_profile(uname):
 
     return render_template("profile/update.html",form=form)
 
-'''
-update photos
-'''
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
-@login_required
 def update_pic(uname):
-    user = User.query.filter_by(username = uname).first()
+    user = Users.query.filter_by(username = uname).first()
     if 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         path = f'photos/{filename}'
         user.profile= path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
-
-'''
-up down vote
-'''
-
-def upVote():
-    vote=0;
-
-
-def downVote():
-    pass

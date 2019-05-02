@@ -1,184 +1,128 @@
 {%extends 'base.html'%}
-
-
+{%import "bootstrap/wtf.html" as wtf%}
 {%block content%}
-<div class=" main jumbotron">
-  <h1>Welcome to Blogyyy!</h1>
-  <h4>{{message}}</h4>
-  {%if current_user.is_authenticated%}
-  <p>Share your ideas on cars</p><a href="{{url_for('main.new_pitch',uname=current_user.username)}}"><button class="btn default-color" type="button" name="button">Here</button></a>
-  {%else%}
-  <p>Share your ideas on cars </p><a><button class="btn default-color" id="login" type="button" title="Login Required To post your Idea" name="button">Here</button></a>
-  {%endif%}
+<div id="bac" class="jumbotron">
+  <h1>{{message}}</h1>
+  <p>How can a great day start ? with a good inspiration</p>
+  {%for quo in quote%}
+    <p>{{quo.quote}}</p>
+    <i>~~{{quo.author}}~~</i>
+
+  {%endfor%}
+
+
 </div>
 <div class="container-fluid">
+
   <div class="row">
-    {%for all in top_blog%}
-    <div class="col-md-3">
-      <div class="one">
-        <div class="on">
-          <div  class="jumbotron title">
-            <h5>{{all.title}}</h5> <span class="animated fadeIn " aria-hidden="true">New</span>
-          </div>
-          {{all.blog}}
-          <br>
-          <i class="vom">Category {{all.categ}}</i>
-          <br>
-          <hr class="default-color">
-          <a class="btn default-color" href="/blog/new/review/{{all.id}}">comment</a>
-        </div>
+    <div class="col-md-8">
+      <div class="container">
+        <h1 id="h1" style="text-align:center">How to make an API request in Angular7</h1>
+        <h3>1.Install Angular CLI and Create Angular 7 HttpClient Web Application</h3>
+        <p>If you use windows, it might be not necessary to add `sudo`. Next, create a new Angular 7 Web Application using this Angular CLI command.</p>
+        <code>ng new angular6-httpclient</code>
+        <p>Next, go to the newly created Angular 6 project folder.</p>
+        <code>cd ./angular6-httpclient</code>
+        <p>Now, you run the new Angular 6 web application using your own host and port.</p>
+        <code>ng serve -port 4200</code>
+        <p>Then go to <a href="https://127.0.0.1:4200">https://127.0.0.1:4200</a>You should see</p>
+        <img src="/static/img/angular.png" alt="">
+        <p>Add the functions for all RESTful API CRUD consumption.</p>
+        <pre>getProducts(): Observable<any> {
+  return this.http.get(endpoint + 'products').pipe(
+    map(this.extractData));
+}
 
-      </div>
-    </div>
-    {%endfor%}
+getProduct(id): Observable<any> {
+  return this.http.get(endpoint + 'products/' + id).pipe(
+    map(this.extractData));
+}
 
-  </div>
-  <br>
-  <!-- Category Ai starts here-->
-  <div class="ai jumbotron">
-    <div class="row">
-      <div class="col-md-3"><div class="cat card">
-        <h1>Range Rover </h1><hr class="default-color">Category<br><br> <button id="range" class="btn default-color" type="button" name="button">View Category</button></div>
-      </div>
-      <div class="col-md-3"> <div class="cat card">
-        <h1>Mercedes Benz</h1><hr class="default-color">Category<br><br><button id="mac" class="btn default-color" type="button" name="button">View Category</button></div>
-      </div>
-      <div class="col-md-3"><div class="cat card">
-        <h1>Audi</h1><hr class="default-color">Category<br><br><button id="audi" class="btn default-color" type="button" name="button">View Category</button>
-      </div></div>
-      <div class="col-md-3"><div class="cat card">
-        <h1>Subaru</h1><hr class="default-color">Category<br><br><button id="subie" class="btn default-color" type="button" name="button">View Category</button>
-      </div></div>
+addProduct (product): Observable<any> {
+  console.log(product);
+  return this.http.post<any>(endpoint + 'products', JSON.stringify(product), httpOptions).pipe(
+    tap((product) => console.log(`added product w/ id=${product.id}`)),
+    catchError(this.handleError<any>('addProduct'))
+  );
+}
 
-    </div>
-  </div>
+updateProduct (id, product): Observable<any> {
+  return this.http.put(endpoint + 'products/' + id, JSON.stringify(product), httpOptions).pipe(
+    tap(_ => console.log(`updated product id=${id}`)),
+    catchError(this.handleError<any>('updateProduct'))
+  );
+}
 
+deleteProduct (id): Observable<any> {
+  return this.http.delete<any>(endpoint + 'products/' + id, httpOptions).pipe(
+    tap(_ => console.log(`deleted product id=${id}`)),
+    catchError(this.handleError<any>('deleteProduct'))
+  );
+}</pre>
+        <br>
+        <hr class="bg-info">
+        <h1>Comments....</h1>
+        <div class="container">
+          <div class="comments">
+            {%for comment in commento%}
+            <div class="comments card">
+              <div class="card-header">
 
-  <!-- <div id="AI" class="animated fadeIn row">
-    <div class="col-md-12">
-      <h1>Artificial intelligence (AI) Category</h1>
-
-    </div>
-    {%for i in pitch%}
-    <div class="col-md-3">
-      <div class="one">
-        <div class="on">
-          <div  class="jumbotron title">
-            <h5>{{i.title}}</h5>
-          </div>
-          {{i.pitch}}
-          <hr class="default-color">
-          <a class="btn btn-secondary" href="/pitch/new/review/{{i.id}}">comment</a>
-        </div>
-
-      </div>
-
-    </div>
-    {%endfor%}
-  </div>
-  <div id="R" class="animated fadeIn row">
-    <div class="col-md-12">
-      <h1>Robotics  (R) Category</h1>
-
-    </div>
-    <div class="container-fluid">
-      <div class="row">
-        {%for pit in pitch1%}
-        <div class="col-md-3">
-          <div class="one">
-            <div class="on">
-              <div  class="jumbotron title">
-                <h5>{{pit.title}}</h5>
+                <p>{{comment.username}} commented on {{comment.posted}}</p>
               </div>
-              {{pit.pitch}}
-              <hr class="default-color">
-              <a class="btn btn-secondary" href="/pitch/new/review/{{pit.id}}">comment</a>
+              <div class="card-body">
+                  <p>{{comment.comment}}</p>
+              </div>
+              <div class="card-footer">
+
+                {%if current_user.is_authenticated%}
+                <a href="" data-method="delete" data-confirm="Are you sure?">admin online</a>
+                {%endif%}
+              </div>
+            </div>
+
+            {%endfor%}
+
+          </div>
+          <div class="row">
+
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-8">
+              <div class="">
+                <h3>Add a comment</h3>
+                <i class="alert alert-info"><b>By commenting you automatically subscribe to email subscription</b></i>
+                <br>
+                <br>
+                {{wtf.quick_form(comments)}}
+
+              </div>
+
+            </div>
+            <div class="col-md-2">
+
             </div>
 
           </div>
 
-        </div>
 
+        </div>
+      </div>
+
+    </div>
+    <div id="fixed" class="col-md-4">
+      <h1>Tutorials</h1>
+      <hr class="bg-success">
+      <ul class="list-group">
+        {%for blog in blogs%}
+        <li class="list-group-item"><a class="bts" href="/read_blog/title/{{blog.id}}">{{blog.title}}</a></li>
         {%endfor%}
-      </div>
-    </div>
 
-
-    </div>
-
-    <!--Robotic-->
-
-
-<!-- <div id="D" class="animated fadeIn row">
-  <div class="col-md-12">
-    <h1>Drones  (D) Category</h1>
-
-  </div>
-  <div class="container-fluid">
-    <div class="row">
-      {%for i2 in pitch2%}
-      <div class="col-md-3">
-        <div class="one">
-          <div class="on">
-            <div  class="jumbotron title">
-              <h5>{{i2.title}}</h5>
-            </div>
-            {{i2.pitch}}
-            <hr class="default-color">
-            <a class="btn btn-secondary" href="/pitch/new/review/{{i2.id}}">comment</a>
-          </div>
-
-        </div>
-
-      </div>
-
-      {%endfor%}
+      </ul>
     </div>
 
   </div>
-
-    </div>
-
-    <!-- IoT-->
-    <!-- <div id="IoT" class="animated fadeIn row">
-      <div class="col-md-12">
-        <h1>Internet of Everything  (IoT) Category</h1>
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          {%for i3 in pitch3%}
-          <div class="col-md-3">
-            <div class="one">
-              <div class="on">
-                <div  class="jumbotron title">
-                  <h5>{{i3.title}}</h5>
-                </div>
-                {{i3.pitch}}
-                <hr class="default-color">
-                <a class="btn btn-secondary" href="/pitch/new/review/{{i3.id}}">comment</a>
-              </div>
-
-            </div>
-
-          </div>
-
-          {%endfor%}
-        </div>
-      </div>
-
-  </div>
-
-</div> --> 
-<footer class="page-footer font-small bg-default pt-4">
-
-      <!-- Copyright -->
-      <div class="footer-copyright text-center py-3">© 2019 Copyright:
-        <a href="https://github.com/Lonzohope"> Hope Mutheu</a>
-      </div>
-      <!-- Copyright -->
-
-    </footer>
-
-
+</div>
 
 {%endblock%}
